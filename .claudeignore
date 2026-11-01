@@ -1,0 +1,11 @@
+node_modules/
+.git/
+vendor/
+*.log
+*.sql
+*.zip
+*.tar.gz
+docs/screenshots/*.png
+docs/screenshots/*.jpg
+.vscode/
+.idea/

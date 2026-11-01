@@ -1,0 +1,506 @@
+/* Projektboerse – Styles
+ *
+ * Grundregel: KEINE eigenen Marken-/Theme-Farben. Wir benutzen ausschließlich
+ * `currentColor`, `transparent`, `inherit` und neutrale rgba-Werte, damit das
+ * MyBB-Theme (Hell oder Dunkel) komplett durchschlägt.
+ *
+ * Ausnahmen mit eigener Farbe (alle semantisch):
+ *   - .projekt_status_*    – Status-Badges (Workflow-Stadien)
+ *   - .projekt_deadline_*  – Warn- bzw. Error-Banner
+ *   - .projektboerse_redalert(_warning) – Index-Alerts für Team
+ */
+
+/* ===== Layout ============================================================ */
+
+.projektboerse_container {
+    margin: 10px 0;
+}
+
+.projektboerse_section {
+    margin-top: 15px;
+}
+
+.projektboerse_actions {
+    padding: 12px 15px;
+    text-align: right;
+}
+
+.projektboerse_actions_left {
+    text-align: left;
+}
+
+.projektboerse_actions_center {
+    text-align: center;
+}
+
+/* Datenverändernde ModCP-Aktionen laufen als kleines POST-Formular (CSRF).
+   Diese Klasse hält sie inline in der Aktions-Spalte (statt Inline-Style). */
+.projektboerse_inline_form {
+    display: inline;
+    margin: 0;
+}
+
+/* Status-Badge oben rechts in der Detail-Ansicht. */
+.projekt_status_float {
+    float: right;
+}
+
+/* ===== Projekt-Karte (Listenansicht) ===================================== */
+
+.projekt_box {
+    padding: 14px 15px;
+}
+
+.projekt_header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.projekt_header_title {
+    font-size: 1.15em;
+    font-weight: bold;
+    line-height: 1.25;
+}
+
+.projekt_header_title a {
+    text-decoration: none;
+}
+
+.projekt_header_title a:hover {
+    text-decoration: underline;
+}
+
+.projekt_description {
+    margin: 8px 0;
+    line-height: 1.5;
+}
+
+.projekt_meta {
+    margin-top: 10px;
+    font-size: 0.85em;
+    opacity: 0.75;
+}
+
+.projekt_meta_sep {
+    margin: 0 6px;
+    opacity: 0.5;
+}
+
+/* ===== Plotting-Gruppen ================================================== */
+
+.projekt_groups {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+/* Pills sind Links auf die Gruppe – Theme-Linkfarbe und Unterstreichung
+   würden den currentColor-Rahmen zerstören, deshalb neutralisiert. */
+.projekt_group,
+a.projekt_group:link,
+a.projekt_group:visited {
+    display: inline-block;
+    padding: 2px 9px;
+    font-size: 0.8em;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    line-height: 1.5;
+    opacity: 0.85;
+    color: inherit;
+    text-decoration: none;
+}
+
+a.projekt_group:hover {
+    opacity: 1;
+    text-decoration: none;
+}
+
+/* ===== Status-Badges (semantische Akzent-Farben, dürfen bleiben) ========= */
+
+.projekt_status {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.72em;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    line-height: 1.6;
+    vertical-align: middle;
+}
+
+.projekt_status_pending        { background: var(--h4w-status-amber, #ffc107); color: var(--h4w-text-strong, #000); }
+.projekt_status_active         { background: var(--h4w-status-blue, #2196f3); color: var(--h4w-text-on-accent, #fff); }
+.projekt_status_open           { background: var(--h4w-status-green, #4caf50); color: var(--h4w-text-on-accent, #fff); }
+.projekt_status_implementation { background: var(--h4w-status-orange, #ff9800); color: var(--h4w-text-on-accent, #fff); }
+.projekt_status_completed      { background: var(--h4w-status-lime, #8bc34a); color: var(--h4w-text-on-accent, #fff); }
+.projekt_status_rejected       { background: var(--h4w-status-red, #f44336); color: var(--h4w-text-on-accent, #fff); }
+.projekt_status_archived       { background: var(--h4w-status-grey, #9e9e9e); color: var(--h4w-text-on-accent, #fff); }
+.projekt_status_inactive       { background: var(--h4w-status-slate, #607d8b); color: var(--h4w-text-on-accent, #fff); }
+
+/* ===== Detail-Ansicht: Meta-Grid ========================================= */
+
+.projektboerse_meta_grid {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.projektboerse_meta_grid td {
+    padding: 6px 4px;
+    vertical-align: top;
+    width: 50%;
+}
+
+.projektboerse_meta_grid dfn,
+.projektboerse_field > dfn {
+    display: block;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    opacity: 0.65;
+    font-style: normal;
+    margin-bottom: 4px;
+    font-weight: normal;
+}
+
+.projektboerse_meta_grid dfn + * {
+    font-weight: bold;
+}
+
+/* ===== Deadline-Banner (semantisch farbig, dürfen bleiben) =============== */
+
+.projekt_deadline_warning {
+    background: var(--h4w-projektboerse-deadline-warning-bg, #fff3cd);
+    border: 1px solid var(--h4w-status-amber, #ffc107);
+    padding: 10px 12px;
+    margin: 10px 0;
+}
+
+.projekt_deadline_expired {
+    background: var(--h4w-projektboerse-deadline-expired-bg, #f8d7da);
+    border: 1px solid var(--h4w-status-red, #f44336);
+    padding: 10px 12px;
+    margin: 10px 0;
+}
+
+/* ===== Bewerbungen, Kommentare, Implementer-Liste ======================== */
+
+.bewerbung_box {
+    padding: 14px 15px;
+}
+
+.bewerbung_header,
+.kommentar_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid currentColor;
+    /* Border bewusst dünn und über opacity entschärft */
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.bewerbung_body,
+.kommentar_body {
+    line-height: 1.5;
+}
+
+.projektboerse_cat_count {
+    font-weight: normal;
+    opacity: 0.7;
+}
+
+.bewerbung_status {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-size: 0.78em;
+    font-weight: bold;
+    vertical-align: middle;
+    color: var(--h4w-text-on-accent, #fff);
+}
+
+.bewerbung_status_submitted { background: var(--h4w-status-amber, #ffc107); color: var(--h4w-text-strong, #000); }
+.bewerbung_status_accepted  { background: var(--h4w-status-green, #4caf50); color: var(--h4w-text-on-accent, #fff); }
+.bewerbung_status_rejected  { background: var(--h4w-status-red, #f44336); color: var(--h4w-text-on-accent, #fff); }
+
+.bewerbung_actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.bewerbung_actions form {
+    margin: 0;
+}
+
+.bewerbung_quote {
+    margin-top: 8px;
+    padding: 10px 12px;
+    border-left: 3px solid currentColor;
+    background: rgba(0, 0, 0, 0.04);
+    /* schwarze Schicht ist theme-neutral: legt sich auf Hell- wie Dunkel-Themes
+       sanft drüber und verlangt keine Marken-Farbe */
+    line-height: 1.5;
+}
+
+/* ===== Formulare ========================================================= */
+
+.projektboerse_field {
+    padding: 12px 15px;
+}
+
+.projektboerse_field label,
+.projektboerse_field > strong {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.projektboerse_field input[type="text"],
+.projektboerse_field input[type="date"],
+.projektboerse_field textarea,
+.projektboerse_field select {
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+.projektboerse_field textarea {
+    min-height: 6em;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.projektboerse_required {
+    color: var(--h4w-status-red, #f44336);
+    font-weight: bold;
+    margin-left: 2px;
+}
+
+.projektboerse_hint {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.85em;
+    opacity: 0.7;
+}
+
+.projektboerse_groups_list label {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin: 0 12px 6px 0;
+}
+
+/* ===== Navigation (Frontend) ============================================= */
+
+.projektboerse_nav {
+    padding: 10px 15px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.projektboerse_nav_sep {
+    opacity: 0.4;
+}
+
+/* thead-Leiste mit Titel links und Aktions-Button (z.B. "Neues Projekt")
+   rechts. Der Titel füllt den Rest, der Button bleibt rechts und schrumpft nicht. */
+.projektboerse_thead {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.projektboerse_thead > strong {
+    flex: 1 1 auto;
+}
+
+.projektboerse_thead .projektboerse_nav_action {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+/* Dekoratives "+" vor dem "Neues Projekt"-Button. Rein per CSS, damit der
+   Sprachstring reiner Text bleibt. Etwas größer und leichter als der Text,
+   mit dünnem Abstand – wirkt wie ein bewusstes Icon. */
+.projektboerse_nav_action::before {
+    content: "+";
+    margin-right: 7px;
+    font-size: 1.25em;
+    font-weight: 400;
+    line-height: 1;
+    vertical-align: -0.06em;
+    opacity: 0.85;
+}
+
+/* ===== Statistik-Kacheln ================================================= */
+
+.statistik_grid {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.statistik_grid > tbody > tr > td {
+    padding: 0;
+}
+
+.statistik_box {
+    padding: 18px 15px;
+    text-align: center;
+    border: 1px solid currentColor;
+    border-color: rgba(0, 0, 0, 0.1);
+    margin: 6px;
+}
+
+.statistik_number {
+    display: block;
+    font-size: 2em;
+    font-weight: bold;
+    line-height: 1.1;
+    margin-bottom: 4px;
+}
+
+.statistik_label {
+    display: block;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.7;
+}
+
+.statistik_row {
+    padding: 8px 15px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.statistik_row:last-child {
+    border-bottom: 0;
+}
+
+.statistik_row_count {
+    float: right;
+    opacity: 0.75;
+}
+
+.statistik_row_main {
+    display: block;
+}
+
+.statistik_row_implementers {
+    display: block;
+    margin-top: 3px;
+    opacity: 0.8;
+}
+
+/* ===== Empty-States ====================================================== */
+
+.projektboerse_empty {
+    padding: 24px 15px;
+    text-align: center;
+    opacity: 0.7;
+}
+
+/* ===== Red-Alert (Forum-Index, für Team) ================================= */
+
+.projektboerse_redalert {
+    padding: 10px 14px;
+    margin: 10px 0;
+    border: 1px solid var(--h4w-color-danger, #cc0000);
+    background: var(--h4w-alert-red-bgcolor, #ffcccc);
+    color: var(--h4w-text-strong, #000);
+}
+
+.projektboerse_redalert_warning {
+    border-color: var(--h4w-status-amber, #ffc107);
+    background: var(--h4w-projektboerse-redalert-warning-bg, #fff3cd);
+}
+
+.projektboerse_redalert a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+/* ===== ModCP ============================================================= */
+
+.modcp_projektboerse_menu {
+    padding: 5px;
+}
+
+.projektboerse_modcp_count {
+    color: var(--h4w-color-danger, #cc0000);
+    font-weight: bold;
+}
+
+/* ===== Anleitung (Guide) ================================================= */
+
+.projektboerse_guide_text {
+    padding: 14px 15px;
+    line-height: 1.6;
+}
+
+.projektboerse_guide_text p {
+    margin: 0 0 10px 0;
+}
+
+.projektboerse_guide_text p:last-child {
+    margin-bottom: 0;
+}
+
+.projektboerse_guide_phase {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 15px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.projektboerse_guide_phase:last-child {
+    border-bottom: 0;
+}
+
+.projektboerse_guide_step {
+    flex: 0 0 auto;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 999px;
+    font-weight: bold;
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.projektboerse_guide_phase_body {
+    flex: 1 1 auto;
+}
+
+.projektboerse_guide_phase_body p {
+    margin: 6px 0 0 0;
+    line-height: 1.55;
+}
+
+/* ===== Responsive ======================================================== */
+
+@media (max-width: 640px) {
+    .projekt_header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .projektboerse_meta_grid,
+    .projektboerse_meta_grid tbody,
+    .projektboerse_meta_grid tr,
+    .projektboerse_meta_grid td {
+        display: block;
+        width: 100%;
+    }
+}

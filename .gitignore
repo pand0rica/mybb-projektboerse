@@ -1,0 +1,39 @@
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# SFTP / Credentials
+.vscode/sftp.json
+sftp.json
+*.env
+*.env.local
+
+# Backups / Dumps
+*.bak
+*.backup
+*.sql
+*.sql.gz
+*.zip
+*.tar.gz
+
+# Logs
+*.log
+error_log
+
+# Forum post artifact (German BBCode, not code)
+PLUGIN_POST.html
+
+# Internal docs (not for public release)
+DELIVERY_SUMMARY.md
+TESTING.md
+INTERNAL_NOTES.md
+DOKUMENTATION.md
+HINWEIS.md
+INSTALLATION.md
