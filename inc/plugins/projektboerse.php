@@ -41,7 +41,7 @@ function projektboerse_info(): array
     return [
         "name"          => "Projektbörse",
         "description"   => "Vollständige Projektverwaltung mit Einreichung, Freigabe, Feedback, Bewerbungen und Umsetzung.",
-        "website"       => "https://github.com/pand0rica/projektboerse",
+        "website"       => "https://github.com/pand0rica/mybb-projektboerse",
         "author"        => "pand0rica",
         "authorsite"    => "https://github.com/pand0rica",
         "version"       => "3.2.1",

@@ -14,7 +14,7 @@ implementers are chosen, and the project is tracked through to completion.
   *Optional:* [MyAlerts](https://community.mybb.com/mods.php?action=view&pid=521)
   – if installed, alerts are pushed to MyAlerts; without it they are still
   written to the plugin's own log table.
-  *Optional:* [plottinggroups](https://github.com/pand0rica/plottinggroups)
+  *Optional:* [plottinggroups](https://github.com/pand0rica/mybb-plottinggroups)
   – enables assigning projects to plotting groups and notifying their members.
   When a project is **approved** or **completed**, the event is also added to the
   "latest events" history of every plotting group it belongs to. Without it the
