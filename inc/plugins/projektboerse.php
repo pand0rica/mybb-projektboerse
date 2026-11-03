@@ -103,6 +103,12 @@ function projektboerse_uninstall(): void
             $db->drop_table($table);
         }
     }
+
+    // Settings + Gruppe entfernen (gehören zu install/uninstall, nicht zu
+    // activate/deactivate – sonst gehen individuelle Werte bei jedem Update verloren).
+    $db->delete_query('settings', "name LIKE 'projektboerse\\_%'");
+    $db->delete_query('settinggroups', "name = 'projektboerse'");
+    rebuild_settings();
 }
 
 /**
@@ -293,9 +299,8 @@ function projektboerse_deactivate(): void
     // Templates entfernen.
     $db->delete_query('templates', "title LIKE 'projektboerse_%'");
 
-    // Settings + Gruppe entfernen.
-    $db->delete_query('settings', "name LIKE 'projektboerse_%'");
-    $db->delete_query('settinggroups', "name = 'projektboerse'");
+    // Settings + settinggroup bleiben beim Deaktivieren erhalten (debugging.md #21);
+    // sie werden erst in projektboerse_uninstall() entfernt.
 
     // Stylesheet aus allen Themes entfernen.
     require_once MYBB_ROOT . "inc/adminfunctions_templates.php";
@@ -426,7 +431,7 @@ function projektboerse_install_stylesheet(): void
             ]);
             $db->update_query("themestylesheets",
                 ["cachefile" => "css.php?stylesheet={$sid}"],
-                "sid='{$sid}'", 1);
+                'sid = ' . (int)$sid, 1);
         }
         update_theme_stylesheet_list($tid);
     }

@@ -4,6 +4,24 @@ All notable changes to this plugin are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 Versioning: [SemVer](https://semver.org/).
 
+## [Unreleased]
+
+### Fixed
+- **Settings were lost on every deactivate/activate.** `projektboerse_deactivate()` deleted
+  all settings and the settinggroup, so every update reset the configuration to the
+  defaults. Settings are now removed only in `projektboerse_uninstall()` (dev kit
+  `debugging.md` #21).
+- Stylesheet query no longer quotes the integer `sid`.
+
+### Security
+- The ACP module checks the return value of `verify_post_check()` via
+  `projektboerse_acp_verify_key()` (in the ACP the function does not abort on its own).
+- JavaScript confirm texts (ACP and ModCP) are built with `json_encode()` instead of
+  `addslashes()`.
+
+### Changed
+- German texts: “Ersteller” → “Eingereicht von”, “Umsetzer” → gender-neutral wording.
+
 ## [3.2.1] – 2026-11-01
 
 ### Fixed

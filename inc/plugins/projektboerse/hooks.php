@@ -666,7 +666,7 @@ function projektboerse_modcp_action_button(string $do, int $pid, string $label, 
         // Verstecktes Formular + echter <a>-Link (ohne eigene Klasse => identisches
         // Aussehen wie die Nachbar-Links). Der Klick sendet das Formular per JS.
         $confirm_js = $confirm !== ''
-            ? 'if(!confirm(\'' . addslashes($confirm) . '\')){return false;}'
+            ? 'if(!confirm(' . htmlspecialchars_uni((string)json_encode($confirm)) . ')){return false;}'
             : '';
 
         return '<form method="post" action="modcp.php?action=projektboerse" class="projektboerse_inline_form" style="display:none">' .
@@ -677,7 +677,7 @@ function projektboerse_modcp_action_button(string $do, int $pid, string $label, 
     }
 
     $onsubmit = $confirm !== ''
-        ? ' onsubmit="return confirm(\'' . addslashes($confirm) . '\');"'
+        ? ' onsubmit="return confirm(' . htmlspecialchars_uni((string)json_encode($confirm)) . ');"'
         : '';
 
     return '<form method="post" action="modcp.php?action=projektboerse" class="projektboerse_inline_form"' . $onsubmit . '>' .
@@ -744,7 +744,7 @@ function projektboerse_render_modcp_project_list(string $where, string $empty_te
                 $lang->projektboerse_delete . '</a>';
         } elseif ($project['status'] === 'implementation') {
             // Bewerbungen bleiben auch in der Umsetzungsphase erreichbar, damit
-            // das Team weitere Umsetzer:innen annehmen kann (Mehrfach-Annahme).
+            // das Team weitere Umsetzende annehmen kann (Mehrfach-Annahme).
             $actions[] = '<a href="modcp.php?action=projektboerse&amp;do=applications&amp;pid=' . $pid_link . '">' .
                 $lang->projektboerse_applications . '</a>';
             $actions[] = '<a href="modcp.php?action=projektboerse&amp;do=edit&amp;pid=' . $pid_link . '">' .
