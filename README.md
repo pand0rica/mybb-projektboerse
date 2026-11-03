@@ -161,14 +161,11 @@ pending → active → open → implementation → completed
 ## Uninstallation
 
 1. **ACP → Configuration → Plugins** → *Deactivate* Projektbörse. This
-   removes templates, settings, the setting group, the stylesheet from every
-   theme and the deadline task.
-2. *Uninstall* Projektbörse to drop all `projektboerse_*` tables.
+   removes the templates, the stylesheet from every theme, the deadline task and
+   the alert types. Your settings are kept, so deactivating/reactivating (e.g. for
+   an update) never resets them.
+2. *Uninstall* Projektbörse to drop all `projektboerse_*` tables and remove the settings.
 
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md).
-
-## License
-
-GPL v3 – see [LICENSE](LICENSE).
