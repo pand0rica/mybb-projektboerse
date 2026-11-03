@@ -326,22 +326,14 @@ a.projekt_group:hover {
     flex: 1 1 auto;
 }
 
-.projektboerse_thead .projektboerse_nav_action {
+.projektboerse_thead .projektboerse_inline_form {
     flex: 0 0 auto;
     white-space: nowrap;
 }
 
-/* Dekoratives "+" vor dem "Neues Projekt"-Button. Rein per CSS, damit der
-   Sprachstring reiner Text bleibt. Etwas größer und leichter als der Text,
-   mit dünnem Abstand – wirkt wie ein bewusstes Icon. */
-.projektboerse_nav_action::before {
-    content: "+";
-    margin-right: 7px;
-    font-size: 1.25em;
-    font-weight: 400;
-    line-height: 1;
-    vertical-align: -0.06em;
-    opacity: 0.85;
+/* Abstand zwischen nebeneinanderstehenden Aktions-Buttons (conventions.md §9). */
+.projektboerse_inline_form + .projektboerse_inline_form {
+    margin-left: 4px;
 }
 
 /* ===== Statistik-Kacheln ================================================= */

@@ -20,6 +20,14 @@ Versioning: [SemVer](https://semver.org/).
   `addslashes()`.
 
 ### Changed
+- **All actions are real buttons** (dev kit `debugging.md` #22): the ModCP project and
+  application columns no longer use text links with `|` separators or links that submit a
+  hidden form via JavaScript. Navigation (view, edit, approve form, reject form, delete form,
+  applications, “New project”) uses GET forms, state changes (open applications, complete,
+  reopen, archive, accept, reject) POST forms with `my_post_key` – all as
+  `<input type="submit" class="button">`. “Cancel” on the reject and delete forms is a
+  button as well. The decorative “+” before “New project” is gone (pseudo-elements do not
+  work on input buttons).
 - German texts: “Ersteller” → “Eingereicht von”, “Umsetzer” → gender-neutral wording.
 
 ## [3.2.1] – 2026-11-01
