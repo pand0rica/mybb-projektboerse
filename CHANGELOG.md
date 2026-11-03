@@ -14,8 +14,9 @@ Versioning: [SemVer](https://semver.org/).
 - Stylesheet query no longer quotes the integer `sid`.
 
 ### Security
-- The ACP module checks the return value of `verify_post_check()` via
-  `projektboerse_acp_verify_key()` (in the ACP the function does not abort on its own).
+- ACP CSRF protection uses MyBB's native mechanism (dev kit `debugging.md` #23): write
+  handlers only act on POST and `admin/index.php` validates the `my_post_key` itself –
+  no own key check or helper.
 - JavaScript confirm texts (ACP and ModCP) are built with `json_encode()` instead of
   `addslashes()`.
 

@@ -30,19 +30,6 @@ $action = $mybb->get_input('action');
 /**
  * Liefert die ACP-Navigationstabs.
  */
-/**
- * Schreibende ACP-Aktionen: verify_post_check() bricht im ACP nicht ab,
- * daher Rückgabewert prüfen (debugging.md #23).
- */
-function projektboerse_acp_verify_key(): void
-{
-    global $mybb, $lang;
-
-    if (!verify_post_check($mybb->get_input('my_post_key'), true)) {
-        flash_message($lang->invalid_post_verify_key2, 'error');
-        admin_redirect('index.php?module=config-projektboerse');
-    }
-}
 
 function projektboerse_acp_nav_tabs(string $active): void
 {
@@ -119,7 +106,6 @@ function projektboerse_acp_backfill_events(): void
     if ($mybb->request_method !== 'post') {
         admin_redirect("index.php?module=config-projektboerse");
     }
-    projektboerse_acp_verify_key();
 
     $result = ProjektboerseProject::backfill_group_events();
 
@@ -153,7 +139,6 @@ function projektboerse_acp_crud(string $table, string $pk_col, string $action,
 
     // POST-Handling.
     if ($mybb->request_method === 'post') {
-        projektboerse_acp_verify_key();
 
         $sub_action = $mybb->get_input('sub_action');
         $row_id     = (int)$mybb->get_input($pk_col, MyBB::INPUT_INT);
@@ -418,7 +403,6 @@ function projektboerse_acp_alerts(): void
     global $page, $db, $mybb, $lang;
 
     if ($mybb->request_method === 'post') {
-        projektboerse_acp_verify_key();
 
         $alert_settings = [
             'projektboerse_alert_new_project',
