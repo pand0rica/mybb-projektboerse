@@ -1,0 +1,116 @@
+[size=x-large][b]Projektbörse[/b][/size]
+[i]Version 3.2.1[/i] – Ideen und Aufgaben fürs Forum sammeln, gemeinsam besprechen und von Freiwilligen umsetzen lassen – mit klaren Phasen von der Einreichung bis zum Abschluss.
+
+[size=large][b]Worum geht's?[/b][/size]
+
+In vielen Foren gibt es mehr Ideen als Hände: eine neue Grafik, ein Event, ein Wiki-Artikel. Oft versanden sie in einem Thread, weil niemand weiß, wer sich kümmert. Die Projektbörse gibt jeder Idee einen festen Ablauf: Einreichen, Freigabe durchs Team, Feedback-Phase, Bewerbungen, Umsetzung, Abschluss. So sieht jede Person jederzeit, was gerade gebraucht wird – Feedback, Mitwirkende oder Geduld.
+
+[size=large][b]Highlights[/b][/size]
+
+[list]
+[*] Klarer Ablauf mit Phasen und automatischen Deadlines
+[*] Bewerbungen mit Motivation, auch mehrere Umsetzende pro Projekt
+[*] Feedback-Kommentare während der Feedback-Phase
+[*] Benachrichtigungen pro Ereignis einzeln schaltbar, mit eigenem Alert-Protokoll
+[*] Öffentliche Statistik mit den aktivsten Umsetzenden
+[/list]
+
+[size=large][b]Was das Plugin alles kann[/b][/size]
+
+[b]Für Mitglieder[/b]
+[list]
+[*][b]Projektbörse[/b] – Alle sichtbaren Projekte, nach Kategorie gruppiert, mit Status, Deadlines und Umsetzenden. [i](projektboerse.php)[/i]
+[*][b]Projekt einreichen[/b] – Titel, Beschreibung und Kategorie genügen; den Rest ergänzt das Team bei der Freigabe. [i](projektboerse.php → Neues Projekt)[/i]
+[*][b]Feedback geben[/b] – In der Feedback-Phase kommentierst du Projekte, bevor sie für Bewerbungen öffnen. [i](Projektansicht)[/i]
+[*][b]Bewerben[/b] – Bei offenen Projekten bewirbst du dich einmal pro Projekt mit einer kurzen Motivation. [i](Projektansicht)[/i]
+[*][b]Statistik[/b] – Gesamtzahlen, die aktivsten Umsetzenden und was gerade in Arbeit ist. [i](projektboerse.php?do=stats)[/i]
+[*][b]Anleitung[/b] – Eine eingebaute Erklärung aller Phasen und Rollen.
+[/list]
+
+[b]Für Team & Moderation[/b]
+[list]
+[*][b]Freigabe[/b] – Neue Projekte prüfen und mit Typ, Kommunikationsweg, Deadlines, optionaler Belohnung, Ansprechperson und Links freigeben – oder mit Begründung ablehnen. [i](ModCP → Projektbörse)[/i]
+[*][b]Bewerbungen verwalten[/b] – Bewerbungen einzeln annehmen oder ablehnen; mit der ersten Annahme startet die Umsetzung. [i](ModCP → Projektbörse)[/i]
+[*][b]Status steuern[/b] – Bewerbungsphase vorzeitig öffnen, abschließen, wieder öffnen, archivieren, bearbeiten oder löschen. [i](ModCP → Projektbörse)[/i]
+[*][b]Hinweis auf der Startseite[/b] – Warten Projekte auf Freigabe, sieht das Team einen roten Hinweis. [i](Startseite)[/i]
+[/list]
+
+[b]Für Administratoren[/b]
+[list]
+[*][b]Stammdaten[/b] – Kategorien, Projekttypen und Kommunikationswege verwalten (mit sinnvollen Vorgaben). [i](ACP → Konfiguration → Projektbörse)[/i]
+[*][b]Benachrichtigungen[/b] – Jedes Ereignis einzeln ein- oder ausschalten; das Alert-Protokoll zeigt, wer wann was bekommen hat. [i](ACP → Projektbörse → Alert-Einstellungen)[/i]
+[*][b]Statistik und Wartung[/b] – Projektstatistik im ACP und ein Werkzeug, das die Ereignis-Historie der Plotgruppen für ältere Projekte nachträgt. [i](ACP → Projektbörse)[/i]
+[/list]
+
+[b]Läuft automatisch[/b]
+[list]
+[*][b]Deadlines[/b] – Alle 30 Minuten wechseln Projekte nach Ablauf der Feedback-Frist in die Bewerbungsphase; bei überschrittener Umsetzungsfrist gibt es höchstens einmal am Tag eine Erinnerung.
+[/list]
+
+[b]Zusammenspiel mit anderen Plugins[/b]
+[list]
+[*][b]MyAlerts[/b] – Benachrichtigungen landen in MyAlerts; ohne MyAlerts werden sie nur im Protokoll festgehalten.
+[*][b]Plotting Groups[/b] – Projekte lassen sich Plotgruppen zuordnen, deren Mitglieder benachrichtigt werden; Freigabe und Abschluss erscheinen in der Ereignis-Historie der Gruppe.
+[/list]
+
+[size=large][b]So sieht's aus[/b][/size]
+
+[i]Screenshot folgt[/i] – Ein Projekt in der Projektbörse
+
+[i]Screenshot folgt[/i] – Das Bewerbungsformular
+
+[i]Screenshot folgt[/i] – Freigaben im ModCP
+
+[i]Screenshot folgt[/i] – Übersicht im ACP
+
+[size=large][b]Einstellungen[/b][/size]
+
+[list]
+[*][b]Plugin aktivieren[/b] – Hauptschalter fürs Forum.
+[*][b]Erlaubte Gruppen[/b] – Nur diese Gruppen nutzen die Projektbörse überhaupt und bekommen Alerts, z. B. um Charakter-Accounts auszuschließen. [i](Standard: leer = alle)[/i]
+[*][b]Gruppen fürs Einreichen, Bewerben und Team[/b] – jeweils zusätzlich durch die erlaubten Gruppen gefiltert.
+[*][b]Alerts pro Ereignis[/b] – u. a. neue Projekte, Freigabe, Öffnen für Bewerbungen, Bewerbungen, Zuweisung, Plotgruppen.
+[*][b]Zusätzliche Empfangende[/b] für neue Projekte und Feedback.
+[*][b]Standardfristen[/b] für Feedback und Umsetzung in Tagen, [b]Projekte pro Seite[/b].
+[*][b]HTML erlauben[/b] – sicheres HTML in Projektinhalten; Skripte und gefährliche Links werden entfernt. [i](Standard: Nein)[/i]
+[/list]
+
+[size=large][b]Voraussetzungen[/b][/size]
+
+[list]
+[*] MyBB 1.8.x
+[*] PHP 7.4 oder 8.x, MySQL 5.7+ bzw. MariaDB 10.2+
+[*] Optional: MyAlerts, Plotting Groups (vorher aktivieren)
+[/list]
+
+[size=large][b]Installation[/b][/size]
+
+[list=1]
+[*] Dateien in das MyBB-Stammverzeichnis kopieren (Ordnerstruktur beibehalten)
+[*] ACP → Konfiguration → Plugins → Projektbörse → Installieren & aktivieren
+[*] ACP → Konfiguration → Einstellungen → Projektbörse → Gruppen festlegen
+[*] ACP → Konfiguration → Projektbörse → Kategorien, Typen und Kommunikationswege prüfen
+[/list]
+
+[size=large][b]Update[/b][/size]
+
+[list=1]
+[*] Neue Dateien hochladen und vorhandene überschreiben
+[*] ACP → Konfiguration → Plugins → Projektbörse → Deaktivieren und wieder Aktivieren
+[/list]
+Templates, Stylesheet und Datenbankschema werden aktualisiert; Projekte und Einstellungen bleiben erhalten.
+
+[size=large][b]Grenzen & Ausblick[/b][/size]
+
+Eine Bewerbung pro Person und Projekt. Ältere Projekte erscheinen erst nach dem Nachtragen in der Ereignis-Historie der Plotgruppen.
+
+[size=large][b]Download & Quellcode[/b][/size]
+
+&raquo; [url=https://github.com/pand0rica/mybb-projektboerse]GitHub: pand0rica/mybb-projektboerse[/url] – Änderungen im [url=https://github.com/pand0rica/mybb-projektboerse/blob/main/CHANGELOG.md]Changelog[/url], Lizenz GPL-3.0
+
+[size=large][b]Unterstützung[/b][/size]
+
+<i class="cp cp-tea"></i> Wenn dir das Plugin gefällt, kannst du mir gerne einen Tee spendieren: [url=https://ko-fi.com/pand0rica]ko-fi.com/pand0rica[/url]
+
+[size=small]Fragen, Bugs oder Feature-Wünsche gerne als GitHub Issue melden oder hier im Thread.
+Ich freue mich, wenn ihr mir den Link dalasst, wo das Plugin verwendet wird.[/size]
