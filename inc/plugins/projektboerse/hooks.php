@@ -220,7 +220,8 @@ function projektboerse_html_allowed(): bool
 /**
  * Formatiert einen Freitext-Block (Beschreibung, Belohnung, Wiki-Links).
  *
- * - Setting AUS: vollständiger HTML-Escape + nl2br (Plain Text).
+ * - Setting AUS: MyBB-Parser mit MyCode, aber ohne HTML (HTML wird escaped,
+ *                Zeilenumbrüche bleiben erhalten) – wie in normalen Beiträgen.
  * - Setting AN : Sanitizer-Allowlist mit DOMDocument; Skript-Tags,
  *                Event-Handler und gefährliche URL-Schemata werden entfernt.
  */
@@ -231,9 +232,44 @@ function projektboerse_format_html(string $input): string
         return '';
     }
     if (!projektboerse_html_allowed()) {
-        return nl2br(htmlspecialchars_uni($input));
+        return projektboerse_get_parser()->parse_message($input, [
+            'allow_html'      => 0,
+            'allow_mycode'    => 1,
+            'allow_smilies'   => 1,
+            'allow_imgcode'   => 1,
+            'allow_videocode' => 0,
+            'filter_badwords' => 1,
+            'nl2br'           => 1,
+        ]);
     }
     return projektboerse_sanitize_html($input);
+}
+
+/**
+ * Reiner Text eines Freitext-Blocks für Kurzvorschauen: MyCode und HTML werden
+ * entfernt, nicht roh angezeigt. Rückgabe ist noch NICHT escaped.
+ */
+function projektboerse_plain_text(string $input): string
+{
+    $text = projektboerse_get_parser()->text_parse_message((string)$input, [
+        'allow_html'   => 0,
+        'allow_mycode' => 1,
+    ]);
+    $text = html_entity_decode(strip_tags($text), ENT_QUOTES, 'UTF-8');
+    return trim(preg_replace('/\s+/u', ' ', $text));
+}
+
+/**
+ * Gemeinsame postParser-Instanz.
+ */
+function projektboerse_get_parser(): postParser
+{
+    require_once MYBB_ROOT . 'inc/class_parser.php';
+    static $parser = null;
+    if ($parser === null) {
+        $parser = new postParser();
+    }
+    return $parser;
 }
 
 /**
@@ -1367,7 +1403,7 @@ function projektboerse_render_project_bit(array $project): string
     $category_name = $cat_name ?: '-';
 
     $project['title']            = htmlspecialchars_uni((string)$project['title']);
-    $description_plain           = strip_tags((string)$project['description']);
+    $description_plain           = projektboerse_plain_text((string)$project['description']);
     $project['description_short'] = htmlspecialchars_uni(mb_substr($description_plain, 0, 200));
     if (mb_strlen($description_plain) > 200) {
         $project['description_short'] .= '…';
@@ -1622,7 +1658,7 @@ function projektboerse_view_project(): void
     // Felder fürs Template aufbereiten:
     // - Titel: immer reines Escape (taucht u.a. in <title>/Breadcrumbs auf).
     // - Beschreibung + Belohnung: via projektboerse_format_html() – respektiert
-    //   die Setting projektboerse_allow_html (sicherer Sanitizer oder Escape).
+    //   die Setting projektboerse_allow_html (sicherer Sanitizer oder MyCode ohne HTML).
     $project['title']       = htmlspecialchars_uni((string)$project['title']);
     $project['description'] = projektboerse_format_html((string)$project['description']);
     $reward_raw             = (string)($project['reward'] ?? '');

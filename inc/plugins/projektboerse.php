@@ -334,9 +334,9 @@ function projektboerse_install_settings(int $gid, bool $upgrade_only = false): v
 
     $settings = [
         ['projektboerse_enabled',            'Projektbörse aktiviert',               'Plugin aktivieren/deaktivieren.',                                                       'yesno',         '1',     1],
-        ['projektboerse_allowed_groups',     'Usergruppen: Berechtigt für Projektbörse', 'Master-Allowlist: nur User dieser Gruppen dürfen überhaupt mit der Projektbörse interagieren (einreichen, bewerben, Team) und Alerts empfangen. Hier Haupt-Account-Gruppen auswählen, Charakter-Accounts weglassen. Leer = keine Einschränkung.', 'groupselect', '2,3,4,43', 2],
-        ['projektboerse_submit_groups',      'Usergruppen: Projekte einreichen',     'Welche Usergruppen dürfen Projekte einreichen? Wird zusätzlich durch die Master-Allowlist gefiltert.', 'groupselect', '2,3,4,43', 3],
-        ['projektboerse_apply_groups',       'Usergruppen: Bewerbungen',             'Welche Usergruppen dürfen sich bewerben? Wird zusätzlich durch die Master-Allowlist gefiltert.', 'groupselect', '2,3,4,43', 4],
+        ['projektboerse_allowed_groups',     'Usergruppen: Berechtigt für Projektbörse', 'Master-Allowlist: nur User dieser Gruppen dürfen überhaupt mit der Projektbörse interagieren (einreichen, bewerben, Team) und Alerts empfangen. Hier Haupt-Account-Gruppen auswählen, Charakter-Accounts weglassen. Leer = keine Einschränkung.', 'groupselect', '2,3,4', 2],
+        ['projektboerse_submit_groups',      'Usergruppen: Projekte einreichen',     'Welche Usergruppen dürfen Projekte einreichen? Wird zusätzlich durch die Master-Allowlist gefiltert.', 'groupselect', '2,3,4', 3],
+        ['projektboerse_apply_groups',       'Usergruppen: Bewerbungen',             'Welche Usergruppen dürfen sich bewerben? Wird zusätzlich durch die Master-Allowlist gefiltert.', 'groupselect', '2,3,4', 4],
         ['projektboerse_team_groups',        'Usergruppen: Teammitglieder',          'Welche Usergruppen sind Teammitglieder (Verwaltung)? Wird zusätzlich durch die Master-Allowlist gefiltert.', 'groupselect', '3,4',      5],
         ['projektboerse_alert_new_project',  'Alert: Neues Projekt',                 'Alert senden bei neuem Projekt?',                                                       'yesno',   '1',     6],
         ['projektboerse_alert_approved',     'Alert: Projekt freigegeben',           'Alert senden, wenn Projekt freigegeben wurde?',                                         'yesno',   '1',     7],

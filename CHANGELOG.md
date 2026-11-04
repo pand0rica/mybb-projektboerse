@@ -12,6 +12,8 @@ Versioning: [SemVer](https://semver.org/).
   defaults. Settings are now removed only in `projektboerse_uninstall()` (dev kit
   `debugging.md` #21).
 - Stylesheet query no longer quotes the integer `sid`.
+- MyCode in project descriptions and rewards is rendered: with *Allow HTML* off (default) the text now goes through the MyBB parser (MyCode on, HTML escaped) instead of being shown as plain text with literal `[b]…[/b]`. The excerpt in the project list strips MyCode instead of showing the raw tags. HTML mode is unchanged.
+- Default group lists of `projektboerse_allowed_groups`, `projektboerse_submit_groups` and `projektboerse_apply_groups` no longer contain the forum-specific group `43` (new installations only).
 
 ### Security
 - ACP CSRF protection uses MyBB's native mechanism (dev kit `debugging.md` #23): write
