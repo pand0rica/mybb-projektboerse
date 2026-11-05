@@ -134,14 +134,14 @@ a.projekt_group:hover {
     vertical-align: middle;
 }
 
-.projekt_status_pending        { background: var(--h4w-status-amber, #ffc107); color: var(--h4w-text-strong, #000); }
-.projekt_status_active         { background: var(--h4w-status-blue, #2196f3); color: var(--h4w-text-on-accent, #fff); }
-.projekt_status_open           { background: var(--h4w-status-green, #4caf50); color: var(--h4w-text-on-accent, #fff); }
-.projekt_status_implementation { background: var(--h4w-status-orange, #ff9800); color: var(--h4w-text-on-accent, #fff); }
-.projekt_status_completed      { background: var(--h4w-status-lime, #8bc34a); color: var(--h4w-text-on-accent, #fff); }
-.projekt_status_rejected       { background: var(--h4w-status-red, #f44336); color: var(--h4w-text-on-accent, #fff); }
-.projekt_status_archived       { background: var(--h4w-status-grey, #9e9e9e); color: var(--h4w-text-on-accent, #fff); }
-.projekt_status_inactive       { background: var(--h4w-status-slate, #607d8b); color: var(--h4w-text-on-accent, #fff); }
+.projekt_status_pending        { background: #ffc107; color: #000; }
+.projekt_status_active         { background: #2196f3; color: #fff; }
+.projekt_status_open           { background: #4caf50; color: #fff; }
+.projekt_status_implementation { background: #ff9800; color: #fff; }
+.projekt_status_completed      { background: #8bc34a; color: #fff; }
+.projekt_status_rejected       { background: #f44336; color: #fff; }
+.projekt_status_archived       { background: #9e9e9e; color: #fff; }
+.projekt_status_inactive       { background: #607d8b; color: #fff; }
 
 /* ===== Detail-Ansicht: Meta-Grid ========================================= */
 
@@ -175,15 +175,15 @@ a.projekt_group:hover {
 /* ===== Deadline-Banner (semantisch farbig, dürfen bleiben) =============== */
 
 .projekt_deadline_warning {
-    background: var(--h4w-projektboerse-deadline-warning-bg, #fff3cd);
-    border: 1px solid var(--h4w-status-amber, #ffc107);
+    background: #fff3cd;
+    border: 1px solid #ffc107;
     padding: 10px 12px;
     margin: 10px 0;
 }
 
 .projekt_deadline_expired {
-    background: var(--h4w-projektboerse-deadline-expired-bg, #f8d7da);
-    border: 1px solid var(--h4w-status-red, #f44336);
+    background: #f8d7da;
+    border: 1px solid #f44336;
     padding: 10px 12px;
     margin: 10px 0;
 }
@@ -224,12 +224,12 @@ a.projekt_group:hover {
     font-size: 0.78em;
     font-weight: bold;
     vertical-align: middle;
-    color: var(--h4w-text-on-accent, #fff);
+    color: #fff;
 }
 
-.bewerbung_status_submitted { background: var(--h4w-status-amber, #ffc107); color: var(--h4w-text-strong, #000); }
-.bewerbung_status_accepted  { background: var(--h4w-status-green, #4caf50); color: var(--h4w-text-on-accent, #fff); }
-.bewerbung_status_rejected  { background: var(--h4w-status-red, #f44336); color: var(--h4w-text-on-accent, #fff); }
+.bewerbung_status_submitted { background: #ffc107; color: #000; }
+.bewerbung_status_accepted  { background: #4caf50; color: #fff; }
+.bewerbung_status_rejected  { background: #f44336; color: #fff; }
 
 .bewerbung_actions {
     margin-top: 10px;
@@ -281,7 +281,7 @@ a.projekt_group:hover {
 }
 
 .projektboerse_required {
-    color: var(--h4w-status-red, #f44336);
+    color: #f44336;
     font-weight: bold;
     margin-left: 2px;
 }
@@ -408,14 +408,14 @@ a.projekt_group:hover {
 .projektboerse_redalert {
     padding: 10px 14px;
     margin: 10px 0;
-    border: 1px solid var(--h4w-color-danger, #cc0000);
-    background: var(--h4w-alert-red-bgcolor, #ffcccc);
-    color: var(--h4w-text-strong, #000);
+    border: 1px solid #cc0000;
+    background: #ffcccc;
+    color: #000;
 }
 
 .projektboerse_redalert_warning {
-    border-color: var(--h4w-status-amber, #ffc107);
-    background: var(--h4w-projektboerse-redalert-warning-bg, #fff3cd);
+    border-color: #ffc107;
+    background: #fff3cd;
 }
 
 .projektboerse_redalert a {
@@ -430,7 +430,7 @@ a.projekt_group:hover {
 }
 
 .projektboerse_modcp_count {
-    color: var(--h4w-color-danger, #cc0000);
+    color: #cc0000;
     font-weight: bold;
 }
 

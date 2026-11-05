@@ -23,6 +23,7 @@ Versioning: [SemVer](https://semver.org/).
   `addslashes()`.
 
 ### Changed
+- Stylesheet uses plain colour/size values instead of the `--h4w-*` custom properties of one specific forum theme. (Forum-specific theming lives on the separate `h4w` branch.)
 - **All actions are real buttons** (dev kit `debugging.md` #22): the ModCP project and
   application columns no longer use text links with `|` separators or links that submit a
   hidden form via JavaScript. Navigation (view, edit, approve form, reject form, delete form,
