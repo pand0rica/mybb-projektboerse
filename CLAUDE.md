@@ -125,11 +125,12 @@ geloggt (auch ohne MyAlerts brauchbar).
 
 ## Test-Reihenfolge
 
-Tests laufen auf dem Test-Forum (`test.h4w-rpg.de`), nicht lokal.
+Tests laufen auf dem Test-Forum (`<testforum>`), nicht lokal.
 
 1. Plugin per SFTP auf das Test-Forum hochladen.
 2. Aktivieren → Settings, Templates, Stylesheet, Task prüfen.
 3. Frontend: Projekt einreichen (als Nicht-Team).
 4. ModCP: Freigeben → active → open → Bewerbung annehmen → implementation → complete.
-5. Deaktivieren → alle Artefakte müssen weg sein (Templates, Settings, Styles, Task).
-6. Deinstallieren → alle Tabellen müssen weg sein.
+5. Deaktivieren → Templates, Styles, Task und Alert-Typen müssen weg sein; Settings bleiben
+   erhalten (Dev-Kit `debugging.md` #21).
+6. Deinstallieren → alle Tabellen und Settings müssen weg sein.

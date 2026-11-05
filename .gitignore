@@ -27,9 +27,6 @@ sftp.json
 *.log
 error_log
 
-# Forum post artifact (German BBCode, not code)
-PLUGIN_POST.html
-
 # Internal docs (not for public release)
 DELIVERY_SUMMARY.md
 TESTING.md

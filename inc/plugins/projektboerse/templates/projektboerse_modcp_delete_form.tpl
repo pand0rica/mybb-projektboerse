@@ -23,10 +23,11 @@
 
             <div class="trow2 projektboerse_actions projektboerse_actions_center">
                 <input type="submit" value="{$lang->projektboerse_delete}" class="button" />
-                <a href="modcp.php?action=projektboerse">{$lang->projektboerse_cancel}</a>
+                <input type="submit" class="button" form="projektboerse_cancel_form" value="{$lang->projektboerse_cancel}" />
             </div>
         </div>
     </form>
+    <form method="get" action="modcp.php" id="projektboerse_cancel_form"><input type="hidden" name="action" value="projektboerse" /></form>
 </div>
 {$footer}
 </body>

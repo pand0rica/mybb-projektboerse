@@ -4,6 +4,35 @@ All notable changes to this plugin are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 Versioning: [SemVer](https://semver.org/).
 
+## [Unreleased]
+
+### Fixed
+- **Settings were lost on every deactivate/activate.** `projektboerse_deactivate()` deleted
+  all settings and the settinggroup, so every update reset the configuration to the
+  defaults. Settings are now removed only in `projektboerse_uninstall()` (dev kit
+  `debugging.md` #21).
+- Stylesheet query no longer quotes the integer `sid`.
+- MyCode in project descriptions and rewards is rendered: with *Allow HTML* off (default) the text now goes through the MyBB parser (MyCode on, HTML escaped) instead of being shown as plain text with literal `[b]…[/b]`. The excerpt in the project list strips MyCode instead of showing the raw tags. HTML mode is unchanged.
+- Default group lists of `projektboerse_allowed_groups`, `projektboerse_submit_groups` and `projektboerse_apply_groups` no longer contain the forum-specific group `43` (new installations only).
+
+### Security
+- ACP CSRF protection uses MyBB's native mechanism (dev kit `debugging.md` #23): write
+  handlers only act on POST and `admin/index.php` validates the `my_post_key` itself –
+  no own key check or helper.
+- JavaScript confirm texts (ACP and ModCP) are built with `json_encode()` instead of
+  `addslashes()`.
+
+### Changed
+- **All actions are real buttons** (dev kit `debugging.md` #22): the ModCP project and
+  application columns no longer use text links with `|` separators or links that submit a
+  hidden form via JavaScript. Navigation (view, edit, approve form, reject form, delete form,
+  applications, “New project”) uses GET forms, state changes (open applications, complete,
+  reopen, archive, accept, reject) POST forms with `my_post_key` – all as
+  `<input type="submit" class="button">`. “Cancel” on the reject and delete forms is a
+  button as well. The decorative “+” before “New project” is gone (pseudo-elements do not
+  work on input buttons).
+- German texts: “Ersteller” → “Eingereicht von”, “Umsetzer” → gender-neutral wording.
+
 ## [3.2.1] – 2026-11-01
 
 ### Fixed

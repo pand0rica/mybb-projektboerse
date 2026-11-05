@@ -150,30 +150,28 @@ function projektboerse_render_modcp_application_actions(array $application): str
 
     $aid = (int)$application['aid'];
 
-    // Einheitlich als Text-Links (verstecktes POST-Formular + <a>, CSRF-sicher),
-    // wie die übrigen ModCP-Aktionen.
+    // Echte Buttons in kleinen POST-Formularen (CSRF-sicher, debugging.md #22).
     $accept = projektboerse_modcp_application_action_link('accept_application', $aid, $lang->projektboerse_accept);
     $reject = projektboerse_modcp_application_action_link('reject_application', $aid, $lang->projektboerse_reject);
 
-    return $accept . ' | ' . $reject;
+    return $accept . ' ' . $reject;
 }
 
 /**
- * Rendert eine einzelne Bewerbungs-Aktion als Text-Link mit verstecktem
+ * Rendert eine einzelne Bewerbungs-Aktion als Button in einem kleinen
  * POST-Formular (analog zu projektboerse_modcp_action_button, aber auf aid
- * statt pid). Bleibt so CSRF-sicher und erbt das Theme-Link-Styling.
+ * statt pid).
  */
 function projektboerse_modcp_application_action_link(string $do, int $aid, string $label): string
 {
     global $mybb;
 
-    return '<form method="post" action="modcp.php?action=projektboerse" class="projektboerse_inline_form" style="display:none">' .
+    return '<form method="post" action="modcp.php?action=projektboerse" class="projektboerse_inline_form">' .
         '<input type="hidden" name="do" value="' . htmlspecialchars_uni($do) . '" />' .
         '<input type="hidden" name="aid" value="' . (int)$aid . '" />' .
         '<input type="hidden" name="my_post_key" value="' . $mybb->post_code . '" />' .
-        '</form>' .
-        '<a href="#" onclick="this.previousElementSibling.submit();return false;">' .
-        htmlspecialchars_uni($label) . '</a>';
+        '<input type="submit" class="button" value="' . htmlspecialchars_uni($label) . '" />' .
+        '</form>';
 }
 
 /**
@@ -222,7 +220,8 @@ function projektboerse_html_allowed(): bool
 /**
  * Formatiert einen Freitext-Block (Beschreibung, Belohnung, Wiki-Links).
  *
- * - Setting AUS: vollständiger HTML-Escape + nl2br (Plain Text).
+ * - Setting AUS: MyBB-Parser mit MyCode, aber ohne HTML (HTML wird escaped,
+ *                Zeilenumbrüche bleiben erhalten) – wie in normalen Beiträgen.
  * - Setting AN : Sanitizer-Allowlist mit DOMDocument; Skript-Tags,
  *                Event-Handler und gefährliche URL-Schemata werden entfernt.
  */
@@ -233,9 +232,44 @@ function projektboerse_format_html(string $input): string
         return '';
     }
     if (!projektboerse_html_allowed()) {
-        return nl2br(htmlspecialchars_uni($input));
+        return projektboerse_get_parser()->parse_message($input, [
+            'allow_html'      => 0,
+            'allow_mycode'    => 1,
+            'allow_smilies'   => 1,
+            'allow_imgcode'   => 1,
+            'allow_videocode' => 0,
+            'filter_badwords' => 1,
+            'nl2br'           => 1,
+        ]);
     }
     return projektboerse_sanitize_html($input);
+}
+
+/**
+ * Reiner Text eines Freitext-Blocks für Kurzvorschauen: MyCode und HTML werden
+ * entfernt, nicht roh angezeigt. Rückgabe ist noch NICHT escaped.
+ */
+function projektboerse_plain_text(string $input): string
+{
+    $text = projektboerse_get_parser()->text_parse_message((string)$input, [
+        'allow_html'   => 0,
+        'allow_mycode' => 1,
+    ]);
+    $text = html_entity_decode(strip_tags($text), ENT_QUOTES, 'UTF-8');
+    return trim(preg_replace('/\s+/u', ' ', $text));
+}
+
+/**
+ * Gemeinsame postParser-Instanz.
+ */
+function projektboerse_get_parser(): postParser
+{
+    require_once MYBB_ROOT . 'inc/class_parser.php';
+    static $parser = null;
+    if ($parser === null) {
+        $parser = new postParser();
+    }
+    return $parser;
 }
 
 /**
@@ -640,6 +674,24 @@ function projektboerse_modcp_index(): void
 }
 
 /**
+ * Rendert eine Navigations-Aktion (Ansehen, Bearbeiten, Freigeben-Formular …) als
+ * GET-Formular mit echtem Button – nie als Link (conventions.md §9, debugging.md #22).
+ *
+ * @param string               $script Zielskript, z.B. 'modcp.php'.
+ * @param array<string,string|int> $params Query-Parameter als versteckte Felder.
+ * @param string               $label  Beschriftung (bereits lokalisiert).
+ */
+function projektboerse_get_button(string $script, array $params, string $label): string
+{
+    $html = '<form method="get" action="' . htmlspecialchars_uni($script) . '" class="projektboerse_inline_form">';
+    foreach ($params as $name => $value) {
+        $html .= '<input type="hidden" name="' . htmlspecialchars_uni((string)$name) . '" value="'
+            . htmlspecialchars_uni((string)$value) . '" />';
+    }
+    return $html . '<input type="submit" class="button" value="' . htmlspecialchars_uni($label) . '" /></form>';
+}
+
+/**
  * Rendert einen datenverändernden ModCP-Aktions-Button als kleines POST-Formular
  * inkl. my_post_key. Datenverändernde Aktionen (complete/archive/reopen) dürfen
  * nicht über GET-Links laufen (CSRF, debugging.md #3) – daher ein eigenes Mini-
@@ -649,9 +701,8 @@ function projektboerse_modcp_index(): void
  * @param int    $pid     Projekt-ID.
  * @param string $label   Button-Beschriftung (bereits lokalisiert).
  * @param string $confirm Optionaler JS-Bestätigungstext (leer = keine Rückfrage).
- * @param bool   $as_link Als echter Text-Link rendern (erbt das Theme-Link-Styling
- *                        der Nachbar-Aktionen), der beim Klick das versteckte
- *                        POST-Formular absendet – bleibt so CSRF-sicher.
+ * @param bool   $as_link Veraltet und ohne Wirkung – Aktionen sind immer
+ *                        `<input type="submit" class="button">` (debugging.md #22).
  */
 function projektboerse_modcp_action_button(string $do, int $pid, string $label, string $confirm = '', bool $as_link = false): string
 {
@@ -662,22 +713,12 @@ function projektboerse_modcp_action_button(string $do, int $pid, string $label, 
         '<input type="hidden" name="pid" value="' . (int)$pid . '" />' .
         '<input type="hidden" name="my_post_key" value="' . $mybb->post_code . '" />';
 
-    if ($as_link) {
-        // Verstecktes Formular + echter <a>-Link (ohne eigene Klasse => identisches
-        // Aussehen wie die Nachbar-Links). Der Klick sendet das Formular per JS.
-        $confirm_js = $confirm !== ''
-            ? 'if(!confirm(\'' . addslashes($confirm) . '\')){return false;}'
-            : '';
-
-        return '<form method="post" action="modcp.php?action=projektboerse" class="projektboerse_inline_form" style="display:none">' .
-            $form_fields .
-            '</form>' .
-            '<a href="#" onclick="' . $confirm_js . 'this.previousElementSibling.submit();return false;">' .
-            htmlspecialchars_uni($label) . '</a>';
-    }
+    // $as_link wird nicht mehr ausgewertet: Aktionen sind immer echte Buttons
+    // (debugging.md #22). Parameter bleibt für bestehende Aufrufe erhalten.
+    unset($as_link);
 
     $onsubmit = $confirm !== ''
-        ? ' onsubmit="return confirm(\'' . addslashes($confirm) . '\');"'
+        ? ' onsubmit="return confirm(' . htmlspecialchars_uni((string)json_encode($confirm)) . ');"'
         : '';
 
     return '<form method="post" action="modcp.php?action=projektboerse" class="projektboerse_inline_form"' . $onsubmit . '>' .
@@ -714,41 +755,29 @@ function projektboerse_render_modcp_project_list(string $where, string $empty_te
         $pid_link = (int)$project['pid'];
         $actions  = [];
 
-        $actions[] = '<a href="projektboerse.php?do=view&amp;pid=' . $pid_link . '">' .
-            $lang->projektboerse_view . '</a>';
+        $actions[] = projektboerse_get_button('projektboerse.php', ['do' => 'view', 'pid' => $pid_link], $lang->projektboerse_view);
 
         if ($project['status'] === 'pending') {
-            $actions[] = '<a href="modcp.php?action=projektboerse&amp;do=approve&amp;pid=' . $pid_link . '">' .
-                $lang->projektboerse_approve . '</a>';
-            $actions[] = '<a href="modcp.php?action=projektboerse&amp;do=reject_form&amp;pid=' . $pid_link . '">' .
-                $lang->projektboerse_reject . '</a>';
-            $actions[] = '<a href="modcp.php?action=projektboerse&amp;do=edit&amp;pid=' . $pid_link . '">' .
-                $lang->projektboerse_edit . '</a>';
-            $actions[] = '<a href="modcp.php?action=projektboerse&amp;do=delete_form&amp;pid=' . $pid_link . '">' .
-                $lang->projektboerse_delete . '</a>';
+            $actions[] = projektboerse_get_button('modcp.php', ['action' => 'projektboerse', 'do' => 'approve', 'pid' => $pid_link], $lang->projektboerse_approve);
+            $actions[] = projektboerse_get_button('modcp.php', ['action' => 'projektboerse', 'do' => 'reject_form', 'pid' => $pid_link], $lang->projektboerse_reject);
+            $actions[] = projektboerse_get_button('modcp.php', ['action' => 'projektboerse', 'do' => 'edit', 'pid' => $pid_link], $lang->projektboerse_edit);
+            $actions[] = projektboerse_get_button('modcp.php', ['action' => 'projektboerse', 'do' => 'delete_form', 'pid' => $pid_link], $lang->projektboerse_delete);
         } elseif ($project['status'] === 'active') {
             // Feedback-Phase: Team kann die Phase manuell beenden und das Projekt
             // für Bewerbungen öffnen (sonst passiert das erst per Deadline-Task).
             $actions[] = projektboerse_modcp_action_button('open_applications', $pid_link,
                 $lang->projektboerse_open_applications, $lang->projektboerse_confirm_open_applications, true);
-            $actions[] = '<a href="modcp.php?action=projektboerse&amp;do=edit&amp;pid=' . $pid_link . '">' .
-                $lang->projektboerse_edit . '</a>';
-            $actions[] = '<a href="modcp.php?action=projektboerse&amp;do=delete_form&amp;pid=' . $pid_link . '">' .
-                $lang->projektboerse_delete . '</a>';
+            $actions[] = projektboerse_get_button('modcp.php', ['action' => 'projektboerse', 'do' => 'edit', 'pid' => $pid_link], $lang->projektboerse_edit);
+            $actions[] = projektboerse_get_button('modcp.php', ['action' => 'projektboerse', 'do' => 'delete_form', 'pid' => $pid_link], $lang->projektboerse_delete);
         } elseif ($project['status'] === 'open') {
-            $actions[] = '<a href="modcp.php?action=projektboerse&amp;do=applications&amp;pid=' . $pid_link . '">' .
-                $lang->projektboerse_applications . '</a>';
-            $actions[] = '<a href="modcp.php?action=projektboerse&amp;do=edit&amp;pid=' . $pid_link . '">' .
-                $lang->projektboerse_edit . '</a>';
-            $actions[] = '<a href="modcp.php?action=projektboerse&amp;do=delete_form&amp;pid=' . $pid_link . '">' .
-                $lang->projektboerse_delete . '</a>';
+            $actions[] = projektboerse_get_button('modcp.php', ['action' => 'projektboerse', 'do' => 'applications', 'pid' => $pid_link], $lang->projektboerse_applications);
+            $actions[] = projektboerse_get_button('modcp.php', ['action' => 'projektboerse', 'do' => 'edit', 'pid' => $pid_link], $lang->projektboerse_edit);
+            $actions[] = projektboerse_get_button('modcp.php', ['action' => 'projektboerse', 'do' => 'delete_form', 'pid' => $pid_link], $lang->projektboerse_delete);
         } elseif ($project['status'] === 'implementation') {
             // Bewerbungen bleiben auch in der Umsetzungsphase erreichbar, damit
-            // das Team weitere Umsetzer:innen annehmen kann (Mehrfach-Annahme).
-            $actions[] = '<a href="modcp.php?action=projektboerse&amp;do=applications&amp;pid=' . $pid_link . '">' .
-                $lang->projektboerse_applications . '</a>';
-            $actions[] = '<a href="modcp.php?action=projektboerse&amp;do=edit&amp;pid=' . $pid_link . '">' .
-                $lang->projektboerse_edit . '</a>';
+            // das Team weitere Umsetzende annehmen kann (Mehrfach-Annahme).
+            $actions[] = projektboerse_get_button('modcp.php', ['action' => 'projektboerse', 'do' => 'applications', 'pid' => $pid_link], $lang->projektboerse_applications);
+            $actions[] = projektboerse_get_button('modcp.php', ['action' => 'projektboerse', 'do' => 'edit', 'pid' => $pid_link], $lang->projektboerse_edit);
             $actions[] = projektboerse_modcp_action_button('complete', $pid_link,
                 $lang->projektboerse_complete, $lang->projektboerse_confirm_complete, true);
             $actions[] = projektboerse_modcp_action_button('reopen', $pid_link,
@@ -758,14 +787,12 @@ function projektboerse_render_modcp_project_list(string $where, string $empty_te
         } elseif ($project['status'] === 'completed') {
             $actions[] = projektboerse_modcp_action_button('archive', $pid_link,
                 $lang->projektboerse_archive, $lang->projektboerse_confirm_archive, true);
-            $actions[] = '<a href="modcp.php?action=projektboerse&amp;do=delete_form&amp;pid=' . $pid_link . '">' .
-                $lang->projektboerse_delete . '</a>';
+            $actions[] = projektboerse_get_button('modcp.php', ['action' => 'projektboerse', 'do' => 'delete_form', 'pid' => $pid_link], $lang->projektboerse_delete);
         } else {
-            $actions[] = '<a href="modcp.php?action=projektboerse&amp;do=delete_form&amp;pid=' . $pid_link . '">' .
-                $lang->projektboerse_delete . '</a>';
+            $actions[] = projektboerse_get_button('modcp.php', ['action' => 'projektboerse', 'do' => 'delete_form', 'pid' => $pid_link], $lang->projektboerse_delete);
         }
 
-        $action_buttons = implode(' | ', $actions);
+        $action_buttons = implode(' ', $actions);
 
         $deadline_warning = '';
         if ($project['status'] === 'implementation' && !empty($project['implementation_deadline'])
@@ -1289,7 +1316,7 @@ function projektboerse_index(): void
     add_breadcrumb($lang->projektboerse, "projektboerse.php");
 
     $submit_link = Projektboerse::can_submit()
-        ? '<a href="projektboerse.php?do=create" class="button projektboerse_nav_action">' . $lang->projektboerse_create . '</a>'
+        ? projektboerse_get_button('projektboerse.php', ['do' => 'create'], $lang->projektboerse_create)
         : '';
     eval('$projektboerse_nav = "' . $templates->get('projektboerse_nav') . '";');
     $projektboerse_filter = '';
@@ -1332,7 +1359,7 @@ function projektboerse_list_projects(string $status = 'active'): void
     add_breadcrumb($page_title, "projektboerse.php?do=" . $status);
 
     $submit_link = Projektboerse::can_submit()
-        ? '<a href="projektboerse.php?do=create" class="button projektboerse_nav_action">' . $lang->projektboerse_create . '</a>'
+        ? projektboerse_get_button('projektboerse.php', ['do' => 'create'], $lang->projektboerse_create)
         : '';
     eval('$projektboerse_nav = "' . $templates->get('projektboerse_nav') . '";');
     $projektboerse_filter = '';
@@ -1376,7 +1403,7 @@ function projektboerse_render_project_bit(array $project): string
     $category_name = $cat_name ?: '-';
 
     $project['title']            = htmlspecialchars_uni((string)$project['title']);
-    $description_plain           = strip_tags((string)$project['description']);
+    $description_plain           = projektboerse_plain_text((string)$project['description']);
     $project['description_short'] = htmlspecialchars_uni(mb_substr($description_plain, 0, 200));
     if (mb_strlen($description_plain) > 200) {
         $project['description_short'] .= '…';
@@ -1621,8 +1648,8 @@ function projektboerse_view_project(): void
     // zum Bewerbungsformular, das ohnehin direkt darunter angezeigt wird (siehe
     // $application_form_section). Der Doppel-Button hat User verwirrt.
     if (Projektboerse::can_edit_project($pid, (int)$mybb->user['uid'])) {
-        $action_buttons .= '<a href="projektboerse.php?do=edit&amp;pid=' . $pid . '">' .
-            $lang->projektboerse_edit . '</a> ';
+        $action_buttons .= projektboerse_get_button('projektboerse.php', ['do' => 'edit', 'pid' => $pid],
+            $lang->projektboerse_edit);
     }
     if ($action_buttons === '') {
         $action_buttons = '&nbsp;';
@@ -1631,7 +1658,7 @@ function projektboerse_view_project(): void
     // Felder fürs Template aufbereiten:
     // - Titel: immer reines Escape (taucht u.a. in <title>/Breadcrumbs auf).
     // - Beschreibung + Belohnung: via projektboerse_format_html() – respektiert
-    //   die Setting projektboerse_allow_html (sicherer Sanitizer oder Escape).
+    //   die Setting projektboerse_allow_html (sicherer Sanitizer oder MyCode ohne HTML).
     $project['title']       = htmlspecialchars_uni((string)$project['title']);
     $project['description'] = projektboerse_format_html((string)$project['description']);
     $reward_raw             = (string)($project['reward'] ?? '');
@@ -1945,7 +1972,7 @@ function projektboerse_my_applications(): void
     add_breadcrumb($lang->projektboerse_my_applications, "projektboerse.php?do=my_applications");
 
     $submit_link = Projektboerse::can_submit()
-        ? '<a href="projektboerse.php?do=create" class="button projektboerse_nav_action">' . $lang->projektboerse_create . '</a>'
+        ? projektboerse_get_button('projektboerse.php', ['do' => 'create'], $lang->projektboerse_create)
         : '';
     eval('$projektboerse_nav = "' . $templates->get('projektboerse_nav') . '";');
 
@@ -1995,7 +2022,7 @@ function projektboerse_stats(): void
     add_breadcrumb($lang->projektboerse_stats, "projektboerse.php?do=stats");
 
     $submit_link = Projektboerse::can_submit()
-        ? '<a href="projektboerse.php?do=create" class="button projektboerse_nav_action">' . $lang->projektboerse_create . '</a>'
+        ? projektboerse_get_button('projektboerse.php', ['do' => 'create'], $lang->projektboerse_create)
         : '';
     eval('$projektboerse_nav = "' . $templates->get('projektboerse_nav') . '";');
 
@@ -2106,7 +2133,7 @@ function projektboerse_guide(): void
     add_breadcrumb($lang->projektboerse_guide, "projektboerse.php?do=guide");
 
     $submit_link = Projektboerse::can_submit()
-        ? '<a href="projektboerse.php?do=create" class="button projektboerse_nav_action">' . $lang->projektboerse_create . '</a>'
+        ? projektboerse_get_button('projektboerse.php', ['do' => 'create'], $lang->projektboerse_create)
         : '';
     eval('$projektboerse_nav = "' . $templates->get('projektboerse_nav') . '";');
 

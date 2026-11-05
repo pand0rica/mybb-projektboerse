@@ -21,7 +21,7 @@ $l['myalerts_setting_projektboerse_new_application']       = 'Es gibt eine neue 
 $l['myalerts_setting_projektboerse_application_accepted']  = 'Meine Bewerbung wurde angenommen';
 $l['myalerts_setting_projektboerse_application_rejected']  = 'Meine Bewerbung wurde abgelehnt';
 $l['myalerts_setting_projektboerse_new_comment']           = 'Jemand hat einen Kommentar zu einem meiner Projekte hinterlassen';
-$l['myalerts_setting_projektboerse_implementer_assigned']  = 'Ich wurde als Umsetzer einem Projekt zugewiesen';
+$l['myalerts_setting_projektboerse_implementer_assigned']  = 'Ich wurde einem Projekt zur Umsetzung zugewiesen';
 $l['myalerts_setting_projektboerse_group_assigned']        = 'Einer meiner Plotting-Gruppen wurde ein Projekt zugewiesen';
 $l['myalerts_setting_projektboerse_deadline']              = 'Eine Projekt-Deadline wurde überschritten';
 $l['myalerts_setting_projektboerse_feedback_ended']        = 'Die Feedbackphase meines Projekts ist beendet';
@@ -41,7 +41,7 @@ $l['myalerts_projektboerse_new_application']       = '{from_user} hat sich für 
 $l['myalerts_projektboerse_application_accepted']  = 'Deine Bewerbung für <a href="{link}">{title}</a> wurde angenommen!';
 $l['myalerts_projektboerse_application_rejected']  = 'Deine Bewerbung für <a href="{link}">{title}</a> wurde leider abgelehnt.';
 $l['myalerts_projektboerse_new_comment']           = '{from_user} hat einen Kommentar zu <a href="{link}">{title}</a> hinterlassen.';
-$l['myalerts_projektboerse_implementer_assigned']  = 'Du wurdest dem Projekt <a href="{link}">{title}</a> als Umsetzer zugewiesen.';
+$l['myalerts_projektboerse_implementer_assigned']  = 'Du wurdest dem Projekt <a href="{link}">{title}</a> zur Umsetzung zugewiesen.';
 $l['myalerts_projektboerse_group_assigned']        = 'Das Projekt <a href="{link}">{title}</a> wurde einer deiner Plotting-Gruppen zugewiesen.';
 $l['myalerts_projektboerse_deadline']              = 'Die {deadline_type}-Deadline für <a href="{link}">{title}</a> wurde überschritten.';
 $l['myalerts_projektboerse_feedback_ended']        = 'Die Feedbackphase für <a href="{link}">{title}</a> ist beendet. Das Projekt ist nun für Bewerbungen offen.';

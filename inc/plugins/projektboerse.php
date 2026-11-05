@@ -41,7 +41,7 @@ function projektboerse_info(): array
     return [
         "name"          => "Projektbörse",
         "description"   => "Vollständige Projektverwaltung mit Einreichung, Freigabe, Feedback, Bewerbungen und Umsetzung.",
-        "website"       => "https://github.com/pand0rica/projektboerse",
+        "website"       => "https://github.com/pand0rica/mybb-projektboerse",
         "author"        => "pand0rica",
         "authorsite"    => "https://github.com/pand0rica",
         "version"       => "3.2.1",
@@ -103,6 +103,12 @@ function projektboerse_uninstall(): void
             $db->drop_table($table);
         }
     }
+
+    // Settings + Gruppe entfernen (gehören zu install/uninstall, nicht zu
+    // activate/deactivate – sonst gehen individuelle Werte bei jedem Update verloren).
+    $db->delete_query('settings', "name LIKE 'projektboerse\\_%'");
+    $db->delete_query('settinggroups', "name = 'projektboerse'");
+    rebuild_settings();
 }
 
 /**
@@ -293,9 +299,8 @@ function projektboerse_deactivate(): void
     // Templates entfernen.
     $db->delete_query('templates', "title LIKE 'projektboerse_%'");
 
-    // Settings + Gruppe entfernen.
-    $db->delete_query('settings', "name LIKE 'projektboerse_%'");
-    $db->delete_query('settinggroups', "name = 'projektboerse'");
+    // Settings + settinggroup bleiben beim Deaktivieren erhalten (debugging.md #21);
+    // sie werden erst in projektboerse_uninstall() entfernt.
 
     // Stylesheet aus allen Themes entfernen.
     require_once MYBB_ROOT . "inc/adminfunctions_templates.php";
@@ -329,9 +334,9 @@ function projektboerse_install_settings(int $gid, bool $upgrade_only = false): v
 
     $settings = [
         ['projektboerse_enabled',            'Projektbörse aktiviert',               'Plugin aktivieren/deaktivieren.',                                                       'yesno',         '1',     1],
-        ['projektboerse_allowed_groups',     'Usergruppen: Berechtigt für Projektbörse', 'Master-Allowlist: nur User dieser Gruppen dürfen überhaupt mit der Projektbörse interagieren (einreichen, bewerben, Team) und Alerts empfangen. Hier Haupt-Account-Gruppen auswählen, Charakter-Accounts weglassen. Leer = keine Einschränkung.', 'groupselect', '2,3,4,43', 2],
-        ['projektboerse_submit_groups',      'Usergruppen: Projekte einreichen',     'Welche Usergruppen dürfen Projekte einreichen? Wird zusätzlich durch die Master-Allowlist gefiltert.', 'groupselect', '2,3,4,43', 3],
-        ['projektboerse_apply_groups',       'Usergruppen: Bewerbungen',             'Welche Usergruppen dürfen sich bewerben? Wird zusätzlich durch die Master-Allowlist gefiltert.', 'groupselect', '2,3,4,43', 4],
+        ['projektboerse_allowed_groups',     'Usergruppen: Berechtigt für Projektbörse', 'Master-Allowlist: nur User dieser Gruppen dürfen überhaupt mit der Projektbörse interagieren (einreichen, bewerben, Team) und Alerts empfangen. Hier Haupt-Account-Gruppen auswählen, Charakter-Accounts weglassen. Leer = keine Einschränkung.', 'groupselect', '2,3,4', 2],
+        ['projektboerse_submit_groups',      'Usergruppen: Projekte einreichen',     'Welche Usergruppen dürfen Projekte einreichen? Wird zusätzlich durch die Master-Allowlist gefiltert.', 'groupselect', '2,3,4', 3],
+        ['projektboerse_apply_groups',       'Usergruppen: Bewerbungen',             'Welche Usergruppen dürfen sich bewerben? Wird zusätzlich durch die Master-Allowlist gefiltert.', 'groupselect', '2,3,4', 4],
         ['projektboerse_team_groups',        'Usergruppen: Teammitglieder',          'Welche Usergruppen sind Teammitglieder (Verwaltung)? Wird zusätzlich durch die Master-Allowlist gefiltert.', 'groupselect', '3,4',      5],
         ['projektboerse_alert_new_project',  'Alert: Neues Projekt',                 'Alert senden bei neuem Projekt?',                                                       'yesno',   '1',     6],
         ['projektboerse_alert_approved',     'Alert: Projekt freigegeben',           'Alert senden, wenn Projekt freigegeben wurde?',                                         'yesno',   '1',     7],
@@ -426,7 +431,7 @@ function projektboerse_install_stylesheet(): void
             ]);
             $db->update_query("themestylesheets",
                 ["cachefile" => "css.php?stylesheet={$sid}"],
-                "sid='{$sid}'", 1);
+                'sid = ' . (int)$sid, 1);
         }
         update_theme_stylesheet_list($tid);
     }

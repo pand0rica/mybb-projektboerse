@@ -53,7 +53,7 @@ $l['projektboerse_guide_tips']         = '<ul><li>Je genauer du dein Projekt bes
 // Projekt-Felder
 $l['projektboerse_title']              = 'Titel';
 $l['projektboerse_description']        = 'Beschreibung';
-$l['projektboerse_owner']              = 'Ersteller';
+$l['projektboerse_owner']              = 'Eingereicht von';
 $l['projektboerse_contact']            = 'Ansprechpartner';
 $l['projektboerse_category']           = 'Kategorie';
 $l['projektboerse_type']               = 'Projekt-Typ';
@@ -103,7 +103,7 @@ $l['projektboerse_confirm_delete']     = 'Wirklich löschen?';
 $l['projektboerse_cancel']             = 'Abbrechen';
 $l['projektboerse_confirm_complete']   = 'Dieses Projekt wirklich als abgeschlossen markieren?';
 $l['projektboerse_confirm_archive']    = 'Dieses Projekt wirklich archivieren?';
-$l['projektboerse_confirm_reopen']     = 'Dieses Projekt wirklich erneut für Bewerbungen öffnen? Die bisherige Umsetzer-Zuweisung wird dabei entfernt.';
+$l['projektboerse_confirm_reopen']     = 'Dieses Projekt wirklich erneut für Bewerbungen öffnen? Die bisherige Zuweisung der Umsetzung wird dabei entfernt.';
 $l['projektboerse_open_applications']  = 'Für Bewerbungen öffnen';
 $l['projektboerse_confirm_open_applications'] = 'Die Feedback-Phase jetzt beenden und das Projekt für Bewerbungen öffnen?';
 
@@ -116,7 +116,7 @@ $l['projektboerse_error_reject_reason_empty'] = 'Bitte gib eine Begründung an.'
 
 // Löschen mit Bestätigung (ModCP)
 $l['projektboerse_delete_confirm_title'] = 'Dieses Projekt wirklich endgültig löschen?';
-$l['projektboerse_delete_confirm_body']  = 'Alle zugehörigen Bewerbungen, Kommentare, Gruppen-Zuweisungen, Umsetzer-Zuweisungen und Alert-Logs werden ebenfalls entfernt. Diese Aktion kann nicht rückgängig gemacht werden.';
+$l['projektboerse_delete_confirm_body']  = 'Alle zugehörigen Bewerbungen, Kommentare, Gruppen-Zuweisungen, Umsetzungs-Zuweisungen und Alert-Logs werden ebenfalls entfernt. Diese Aktion kann nicht rückgängig gemacht werden.';
 
 // Ablehnungs-PN
 $l['projektboerse_pm_rejected_subject'] = 'Dein Projekt "{1}" wurde abgelehnt';

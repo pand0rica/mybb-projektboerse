@@ -30,6 +30,7 @@ $action = $mybb->get_input('action');
 /**
  * Liefert die ACP-Navigationstabs.
  */
+
 function projektboerse_acp_nav_tabs(string $active): void
 {
     global $page, $lang;
@@ -105,7 +106,6 @@ function projektboerse_acp_backfill_events(): void
     if ($mybb->request_method !== 'post') {
         admin_redirect("index.php?module=config-projektboerse");
     }
-    verify_post_check($mybb->get_input('my_post_key'));
 
     $result = ProjektboerseProject::backfill_group_events();
 
@@ -139,7 +139,6 @@ function projektboerse_acp_crud(string $table, string $pk_col, string $action,
 
     // POST-Handling.
     if ($mybb->request_method === 'post') {
-        verify_post_check($mybb->get_input('my_post_key'));
 
         $sub_action = $mybb->get_input('sub_action');
         $row_id     = (int)$mybb->get_input($pk_col, MyBB::INPUT_INT);
@@ -214,7 +213,7 @@ function projektboerse_acp_crud(string $table, string $pk_col, string $action,
             $base_url . '&do=edit&' . $pk_col . '=' . $row_id);
         $popup->add_item($lang->projektboerse_delete,
             'javascript:document.getElementById(\'delete_' . $action . '_' . $row_id . '\').submit();',
-            "return confirm('" . addslashes($lang->projektboerse_confirm_delete) . "');");
+            'return confirm(' . htmlspecialchars_uni((string)json_encode($lang->projektboerse_confirm_delete)) . ');');
 
         $delete_form = '<form id="delete_' . $action . '_' . $row_id . '" method="post" action="' .
             htmlspecialchars_uni($base_url) . '" style="display:none;">' .
@@ -349,7 +348,7 @@ function projektboerse_acp_home(): void
     if ($backfill_available) {
         $backfill_form = new Form('index.php?module=config-projektboerse&action=backfill_events', 'post');
         $button = $backfill_form->generate_submit_button($lang->projektboerse_backfill_events_button,
-            ['onclick' => "return confirm('" . addslashes($lang->projektboerse_backfill_confirm) . "');"]);
+            ['onclick' => 'return confirm(' . htmlspecialchars_uni((string)json_encode($lang->projektboerse_backfill_confirm)) . ');']);
         $maint_table->construct_cell($button, ['class' => 'align_center', 'width' => '25%']);
     } else {
         $maint_table->construct_cell($lang->projektboerse_backfill_unavailable, ['class' => 'align_center', 'width' => '25%']);
@@ -404,7 +403,6 @@ function projektboerse_acp_alerts(): void
     global $page, $db, $mybb, $lang;
 
     if ($mybb->request_method === 'post') {
-        verify_post_check($mybb->get_input('my_post_key'));
 
         $alert_settings = [
             'projektboerse_alert_new_project',
