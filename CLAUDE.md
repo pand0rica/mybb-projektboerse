@@ -125,7 +125,7 @@ geloggt (auch ohne MyAlerts brauchbar).
 
 ## Test-Reihenfolge
 
-Tests laufen auf dem Test-Forum (`test.h4w-rpg.de`), nicht lokal.
+Tests laufen auf dem Test-Forum (`<testforum>`), nicht lokal.
 
 1. Plugin per SFTP auf das Test-Forum hochladen.
 2. Aktivieren → Settings, Templates, Stylesheet, Task prüfen.
